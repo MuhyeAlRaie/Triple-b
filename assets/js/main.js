@@ -22,7 +22,8 @@ const elements = {
     modalItemPrice: document.getElementById('modal-item-price'),
     modalItemCalories: document.getElementById('modal-item-calories'),
     modalItemAllergens: document.getElementById('modal-item-allergens'),
-    modalItemIngredients: document.getElementById('modal-item-ingredients')
+    modalItemIngredients: document.getElementById('modal-item-ingredients'),
+     vortishopText: document.getElementById('vortishop-text') 
 };
 
 // Initialize the app
@@ -170,12 +171,22 @@ function toggleLanguage() {
     currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
     document.documentElement.setAttribute('dir', currentLanguage === 'ar' ? 'rtl' : 'ltr');
     updateLanguageToggle();
+    updateVortishopText();
     renderMenu();
 }
 
 // Update language toggle button
 function updateLanguageToggle() {
     elements.langToggle.textContent = currentLanguage === 'en' ? 'العربية' : 'English';
+}
+
+// Update Vortishop text based on language
+function updateVortishopText() {
+    if (currentLanguage === 'en') {
+        elements.vortishopText.textContent = 'Powered by ';
+    } else {
+        elements.vortishopText.textContent = 'مدعوم من ';
+    }
 }
 
 // Render category thumbnails
