@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
 </head>
-
 <body>
     <div id="admin-app">
         <!-- Login Screen -->
@@ -89,9 +87,7 @@
                     <button id="add-category-btn" class="btn btn-primary">Add Category</button>
                 </div>
                 <div id="categories-list" class="admin-list"></div>
-
-                <!-- ... (Keep all existing code) ... -->
-
+                
                 <!-- Category Form Modal -->
                 <div id="category-modal" class="modal">
                     <div class="modal-content">
@@ -121,7 +117,6 @@
                         </form>
                     </div>
                 </div>
-
             </div>
 
             <!-- Menu Items Tab -->
@@ -136,7 +131,7 @@
                     </select>
                 </div>
                 <div id="menu-items-list" class="admin-list"></div>
-
+                
                 <!-- Menu Item Form Modal -->
                 <div id="item-modal" class="modal">
                     <div class="modal-content">
@@ -198,8 +193,9 @@
         </div>
     </div>
 
+    <!-- Load Supabase library first -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <!-- Then load our custom script -->
     <script src="assets/js/admin.js"></script>
 </body>
-
 </html>

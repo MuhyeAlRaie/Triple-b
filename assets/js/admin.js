@@ -1,5 +1,5 @@
 // Global variables
-let supabase;
+let supabaseClient;
 let currentUser = null;
 let restaurantData = {};
 let categories = [];
@@ -41,6 +41,8 @@ const elements = {
     categoryId: document.getElementById('category-id'),
     categoryNameEn: document.getElementById('category-name-en'),
     categoryNameAr: document.getElementById('category-name-ar'),
+    categoryImage: document.getElementById('category-image'),
+    categoryImagePreview: document.getElementById('category-image-preview'),
     categorySortOrder: document.getElementById('category-sort-order'),
     categoryMessage: document.getElementById('category-message'),
     
@@ -73,10 +75,15 @@ const elements = {
 // Initialize the app
 document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Supabase
-    supabase = initializeSupabase();
+    supabaseClient = initializeSupabase();
+    
+    if (!supabaseClient) {
+        showNotification('Error initializing application', 'error');
+        return;
+    }
     
     // Check for existing session
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
     
     if (session) {
         currentUser = session.user;
@@ -95,7 +102,14 @@ function initializeSupabase() {
     const supabaseUrl = 'https://djrkjnzbzxkwidzkvbig.supabase.co'; // Replace with actual URL
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmtqbnpienhrd2lkemt2YmlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTU5NjYsImV4cCI6MjA3NDk3MTk2Nn0.CYDdz-EbFEDqQAFSc864YGxlxAn8hWIA8Rx0pltuJe4'; // Replace with actual key
 
-    return supabase.createClient(supabaseUrl, supabaseAnonKey);
+    // Check if Supabase is available
+    if (typeof window.supabase === 'undefined') {
+        console.error('Supabase library not loaded');
+        showNotification('Error loading application', 'error');
+        return null;
+    }
+    
+    return window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 }
 
 // Setup event listeners
@@ -114,7 +128,7 @@ function setupEventListeners() {
     elements.logoUpload.addEventListener('change', (e) => previewImage(e, elements.logoPreview));
     elements.coverUpload.addEventListener('change', (e) => previewImage(e, elements.coverPreview));
     
-     // Categories
+    // Categories
     elements.addCategoryBtn.addEventListener('click', () => openCategoryModal());
     elements.categoryForm.addEventListener('submit', handleCategorySubmit);
     elements.categoryImage.addEventListener('change', (e) => previewImage(e, elements.categoryImagePreview));
@@ -164,6 +178,11 @@ async function showDashboard() {
 
 // Handle login
 async function handleLogin() {
+    if (!supabaseClient) {
+        showNotification('Supabase client not initialized', 'error');
+        return;
+    }
+    
     const email = elements.emailInput.value.trim();
     const password = elements.passwordInput.value.trim();
     
@@ -176,7 +195,7 @@ async function handleLogin() {
         elements.loginBtn.innerHTML = '<span class="loading"></span>';
         elements.loginBtn.disabled = true;
         
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email,
             password
         });
@@ -199,8 +218,13 @@ async function handleLogin() {
 
 // Handle logout
 async function handleLogout() {
+    if (!supabaseClient) {
+        showNotification('Supabase client not initialized', 'error');
+        return;
+    }
+    
     try {
-        await supabase.auth.signOut();
+        await supabaseClient.auth.signOut();
         currentUser = null;
         showLoginScreen();
         showNotification('Logged out successfully', 'success');
@@ -237,9 +261,14 @@ function switchTab(tabName) {
 
 // Load restaurant data
 async function loadRestaurantData() {
+    if (!supabaseClient) {
+        console.error('Supabase client not initialized');
+        return;
+    }
+    
     try {
         // Fetch restaurant data from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('restaurants')
             .select('*')
             .single();
@@ -276,6 +305,11 @@ function renderRestaurantData() {
 async function handleRestaurantSubmit(e) {
     e.preventDefault();
     
+    if (!supabaseClient) {
+        showNotification('Supabase client not initialized', 'error');
+        return;
+    }
+    
     try {
         elements.restaurantForm.querySelector('button[type="submit"]').innerHTML = '<span class="loading"></span>';
         elements.restaurantForm.querySelector('button[type="submit"]').disabled = true;
@@ -303,7 +337,7 @@ async function handleRestaurantSubmit(e) {
         };
         
         // Update in Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('restaurants')
             .update(updatedData)
             .eq('id', restaurantData.id);
@@ -330,9 +364,14 @@ async function handleRestaurantSubmit(e) {
 
 // Load categories
 async function loadCategories() {
+    if (!supabaseClient) {
+        console.error('Supabase client not initialized');
+        return;
+    }
+    
     try {
         // Fetch categories from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('categories')
             .select('*')
             .order('sort_order');
@@ -393,6 +432,7 @@ function openCategoryModal(categoryId = null) {
     elements.categoryForm.reset();
     elements.categoryMessage.textContent = '';
     elements.categoryMessage.className = 'message';
+    elements.categoryImagePreview.innerHTML = '';
     
     if (categoryId) {
         // Edit mode
@@ -413,13 +453,11 @@ function openCategoryModal(categoryId = null) {
         // Add mode
         elements.categoryModalTitle.textContent = 'Add Category';
         elements.categoryId.value = '';
-        elements.categoryImagePreview.innerHTML = '';
     }
     
     // Show modal
     elements.categoryModal.style.display = 'block';
 }
-
 
 // Edit category
 function editCategory(categoryId) {
@@ -429,6 +467,11 @@ function editCategory(categoryId) {
 // Handle category form submit
 async function handleCategorySubmit(e) {
     e.preventDefault();
+    
+    if (!supabaseClient) {
+        showNotification('Supabase client not initialized', 'error');
+        return;
+    }
     
     const categoryId = elements.categoryId.value;
     const categoryData = {
@@ -452,7 +495,7 @@ async function handleCategorySubmit(e) {
         
         if (categoryId) {
             // Update existing category
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('categories')
                 .update(categoryData)
                 .eq('id', categoryId);
@@ -465,7 +508,7 @@ async function handleCategorySubmit(e) {
             showNotification('Category updated successfully', 'success');
         } else {
             // Add new category
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('categories')
                 .insert([categoryData]);
                 
@@ -505,9 +548,14 @@ async function deleteCategory(categoryId) {
         return;
     }
     
+    if (!supabaseClient) {
+        showNotification('Supabase client not initialized', 'error');
+        return;
+    }
+    
     try {
         // Delete from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('categories')
             .delete()
             .eq('id', categoryId);
@@ -535,9 +583,14 @@ async function deleteCategory(categoryId) {
 
 // Load menu items
 async function loadMenuItems() {
+    if (!supabaseClient) {
+        console.error('Supabase client not initialized');
+        return;
+    }
+    
     try {
         // Fetch menu items from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('items')
             .select('*');
             
@@ -679,6 +732,11 @@ function editMenuItem(itemId) {
 async function handleItemSubmit(e) {
     e.preventDefault();
     
+    if (!supabaseClient) {
+        showNotification('Supabase client not initialized', 'error');
+        return;
+    }
+    
     const itemId = elements.itemId.value;
     const itemData = {
         category_id: elements.itemCategory.value,
@@ -705,7 +763,7 @@ async function handleItemSubmit(e) {
         
         if (itemId) {
             // Update existing item
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('items')
                 .update(itemData)
                 .eq('id', itemId);
@@ -718,7 +776,7 @@ async function handleItemSubmit(e) {
             showNotification('Menu item updated successfully', 'success');
         } else {
             // Add new item
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('items')
                 .insert([itemData]);
                 
@@ -754,9 +812,14 @@ async function deleteMenuItem(itemId) {
         return;
     }
     
+    if (!supabaseClient) {
+        showNotification('Supabase client not initialized', 'error');
+        return;
+    }
+    
     try {
         // Delete from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('items')
             .delete()
             .eq('id', itemId);
