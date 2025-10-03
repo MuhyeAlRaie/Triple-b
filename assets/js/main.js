@@ -1,5 +1,5 @@
 // Global variables
-let supabase;
+let supabaseClient;
 let currentLanguage = 'en';
 let restaurantData = {};
 let categories = [];
@@ -28,7 +28,7 @@ const elements = {
 // Initialize the app
 document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Supabase
-    supabase = initializeSupabase();
+    supabaseClient = initializeSupabase();
     
     // Load restaurant data
     await loadRestaurantData();
@@ -49,15 +49,27 @@ function initializeSupabase() {
     // For production, use environment variables
     const supabaseUrl = 'https://djrkjnzbzxkwidzkvbig.supabase.co'; // Replace with actual URL
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqcmtqbnpienhrd2lkemt2YmlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTU5NjYsImV4cCI6MjA3NDk3MTk2Nn0.CYDdz-EbFEDqQAFSc864YGxlxAn8hWIA8Rx0pltuJe4'; // Replace with actual key
+
+    // Check if Supabase is available
+    if (typeof window.supabase === 'undefined') {
+        console.error('Supabase library not loaded');
+        showNotification('Error loading application', 'error');
+        return null;
+    }
     
-    return supabase.createClient(supabaseUrl, supabaseAnonKey);
+    return window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 }
 
 // Load restaurant data
 async function loadRestaurantData() {
+    if (!supabaseClient) {
+        console.error('Supabase client not initialized');
+        return;
+    }
+    
     try {
         // Fetch restaurant data from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('restaurants')
             .select('*')
             .single();
@@ -85,9 +97,14 @@ async function loadRestaurantData() {
 
 // Load categories
 async function loadCategories() {
+    if (!supabaseClient) {
+        console.error('Supabase client not initialized');
+        return;
+    }
+    
     try {
         // Fetch categories from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('categories')
             .select('*')
             .order('sort_order');
@@ -105,9 +122,14 @@ async function loadCategories() {
 
 // Load menu items
 async function loadMenuItems() {
+    if (!supabaseClient) {
+        console.error('Supabase client not initialized');
+        return;
+    }
+    
     try {
         // Fetch menu items from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('items')
             .select('*')
             .eq('visible', true);
