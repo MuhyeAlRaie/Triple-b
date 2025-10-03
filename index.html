@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple-B Restaurant Menu</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div id="app">
+        <!-- Header with restaurant info -->
+        <header class="restaurant-header">
+            <div class="cover-image-container">
+                <img id="cover-image" src="" alt="Restaurant Cover">
+            </div>
+            <div class="restaurant-info">
+                <img id="logo" src="" alt="Restaurant Logo" class="logo">
+                <h1 id="restaurant-name"></h1>
+                <a id="instagram-link" href="#" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <div class="language-toggle">
+                <button id="lang-toggle" class="btn">العربية</button>
+            </div>
+        </header>
+
+        <!-- Categories -->
+        <div id="categories-container" class="categories-container"></div>
+
+        <!-- Menu Items Container -->
+        <main class="menu-container">
+            <div id="menu-items" class="menu-items-grid"></div>
+        </main>
+
+        <!-- Item Detail Modal -->
+        <div id="item-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-body">
+                    <img id="modal-item-image" src="" alt="Item Image">
+                    <h2 id="modal-item-name"></h2>
+                    <div class="item-price" id="modal-item-price"></div>
+                    <div class="item-details">
+                        <div class="item-calories" id="modal-item-calories"></div>
+                        <div class="item-allergens" id="modal-item-allergens"></div>
+                        <div class="item-ingredients" id="modal-item-ingredients"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

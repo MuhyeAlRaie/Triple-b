@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triple-B Admin Dashboard</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <div id="admin-app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="auth-container">
+            <div class="auth-form">
+                <h2>Admin Login</h2>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button id="login-btn" class="btn btn-primary">Login</button>
+                <div id="login-message" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="dashboard" class="dashboard-container hidden">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <h1>Triple-B Admin Dashboard</h1>
+                <button id="logout-btn" class="btn btn-secondary">Logout</button>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <div class="dashboard-nav">
+                <button class="tab-btn active" data-tab="restaurant">Restaurant</button>
+                <button class="tab-btn" data-tab="categories">Categories</button>
+                <button class="tab-btn" data-tab="menu-items">Menu Items</button>
+            </div>
+
+            <!-- Restaurant Settings Tab -->
+            <div id="restaurant-tab" class="tab-content active">
+                <h2>Restaurant Settings</h2>
+                <form id="restaurant-form" class="admin-form">
+                    <div class="form-group">
+                        <label for="restaurant-name-en">Restaurant Name (English)</label>
+                        <input type="text" id="restaurant-name-en" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="restaurant-name-ar">Restaurant Name (Arabic)</label>
+                        <input type="text" id="restaurant-name-ar" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="instagram-url">Instagram URL</label>
+                        <input type="text" id="instagram-url">
+                    </div>
+                    <div class="form-group">
+                        <label for="logo-upload">Logo</label>
+                        <input type="file" id="logo-upload" accept="image/*">
+                        <div id="logo-preview" class="image-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cover-upload">Cover Image</label>
+                        <input type="file" id="cover-upload" accept="image/*">
+                        <div id="cover-preview" class="image-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="default-lang">Default Language</label>
+                        <select id="default-lang">
+                            <option value="en">English</option>
+                            <option value="ar">Arabic</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <div id="restaurant-message" class="message"></div>
+                </form>
+            </div>
+
+            <!-- Categories Tab -->
+            <div id="categories-tab" class="tab-content">
+                <div class="tab-header">
+                    <h2>Categories</h2>
+                    <button id="add-category-btn" class="btn btn-primary">Add Category</button>
+                </div>
+                <div id="categories-list" class="admin-list"></div>
+
+                <!-- ... (Keep all existing code) ... -->
+
+                <!-- Category Form Modal -->
+                <div id="category-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 id="category-modal-title">Add Category</h2>
+                        <form id="category-form" class="admin-form">
+                            <input type="hidden" id="category-id">
+                            <div class="form-group">
+                                <label for="category-name-en">Category Name (English)</label>
+                                <input type="text" id="category-name-en" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category-name-ar">Category Name (Arabic)</label>
+                                <input type="text" id="category-name-ar" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category-image">Category Image</label>
+                                <input type="file" id="category-image" accept="image/*">
+                                <div id="category-image-preview" class="image-preview"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="category-sort-order">Sort Order</label>
+                                <input type="number" id="category-sort-order" min="0">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Category</button>
+                            <div id="category-message" class="message"></div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Menu Items Tab -->
+            <div id="menu-items-tab" class="tab-content">
+                <div class="tab-header">
+                    <h2>Menu Items</h2>
+                    <button id="add-item-btn" class="btn btn-primary">Add Menu Item</button>
+                </div>
+                <div class="filter-container">
+                    <select id="item-category-filter">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+                <div id="menu-items-list" class="admin-list"></div>
+
+                <!-- Menu Item Form Modal -->
+                <div id="item-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 id="item-modal-title">Add Menu Item</h2>
+                        <form id="item-form" class="admin-form">
+                            <input type="hidden" id="item-id">
+                            <div class="form-group">
+                                <label for="item-category">Category</label>
+                                <select id="item-category" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-name-en">Item Name (English)</label>
+                                <input type="text" id="item-name-en" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-name-ar">Item Name (Arabic)</label>
+                                <input type="text" id="item-name-ar" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-price">Price (SAR)</label>
+                                <input type="number" id="item-price" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-calories">Calories</label>
+                                <input type="number" id="item-calories" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="item-allergens">Allergens (comma-separated)</label>
+                                <input type="text" id="item-allergens">
+                            </div>
+                            <div class="form-group">
+                                <label for="item-ingredients">Ingredients (comma-separated)</label>
+                                <textarea id="item-ingredients"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-image">Item Image</label>
+                                <input type="file" id="item-image" accept="image/*">
+                                <div id="item-image-preview" class="image-preview"></div>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <input type="checkbox" id="item-visible" checked>
+                                <label for="item-visible">Visible on menu</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Item</button>
+                            <div id="item-message" class="message"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Toast -->
+            <div id="notification" class="notification hidden">
+                <div class="notification-content">
+                    <span id="notification-message"></span>
+                    <button id="notification-close" class="notification-close">&times;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+
+</html>
