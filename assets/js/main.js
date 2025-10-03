@@ -288,6 +288,11 @@ function createMenuItemCard(item) {
     // Format allergens
     const allergens = item.allergens ? item.allergens.split(',').map(a => a.trim()).join(', ') : '';
     
+    // Get ingredients based on current language
+    const ingredients = currentLanguage === 'en' ? 
+        (item.ingredients || '') : 
+        (item.ingredients_ar || item.ingredients || '');
+    
     card.innerHTML = `
         <img src="${item.image_url}" alt="${item[`name_${currentLanguage}`]}" class="menu-item-image">
         <div class="menu-item-content">
@@ -301,7 +306,7 @@ function createMenuItemCard(item) {
                 </span>
                 ${allergens ? `<span class="menu-item-allergens"><i class="fas fa-exclamation-triangle"></i> ${currentLanguage === 'en' ? 'Allergens' : 'مسببات الحساسية'}: ${allergens}</span>` : ''}
             </div>
-            <p class="menu-item-ingredients">${item.ingredients}</p>
+            <p class="menu-item-ingredients">${ingredients}</p>
             <button class="view-details-btn">${currentLanguage === 'en' ? 'View Details' : 'عرض التفاصيل'}</button>
         </div>
     `;
@@ -318,6 +323,11 @@ function showItemDetails(item) {
     const allergens = item.allergens ? item.allergens.split(',').map(a => a.trim()).join(', ') : 
                      (currentLanguage === 'en' ? 'None' : 'لا يوجد');
     
+    // Get ingredients based on current language
+    const ingredients = currentLanguage === 'en' ? 
+        (item.ingredients || 'None') : 
+        (item.ingredients_ar || item.ingredients || 'لا يوجد');
+    
     // Update modal content
     elements.modalItemImage.src = item.image_url;
     elements.modalItemImage.alt = item[`name_${currentLanguage}`];
@@ -333,12 +343,13 @@ function showItemDetails(item) {
     `;
     elements.modalItemIngredients.innerHTML = `
         <i class="fas fa-list"></i> 
-        ${currentLanguage === 'en' ? 'Ingredients' : 'المكونات'}: ${item.ingredients}
+        ${currentLanguage === 'en' ? 'Ingredients' : 'المكونات'}: ${ingredients}
     `;
     
     // Show modal
     elements.itemModal.style.display = 'block';
 }
+
 
 // Close modal
 function closeModal() {

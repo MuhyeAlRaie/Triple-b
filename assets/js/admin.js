@@ -61,6 +61,7 @@ const elements = {
     itemCalories: document.getElementById('item-calories'),
     itemAllergens: document.getElementById('item-allergens'),
     itemIngredients: document.getElementById('item-ingredients'),
+    itemIngredientsAr: document.getElementById('item-ingredients-ar'), // Add this line
     itemImage: document.getElementById('item-image'),
     itemImagePreview: document.getElementById('item-image-preview'),
     itemVisible: document.getElementById('item-visible'),
@@ -648,12 +649,23 @@ function renderMenuItems(filterCategoryId = 'all') {
         `;
         
         // Add event listeners
-        listItem.querySelector('.edit').addEventListener('click', () => editMenuItem(item.id));
-        listItem.querySelector('.delete').addEventListener('click', () => deleteMenuItem(item.id));
+        const editBtn = listItem.querySelector('.edit');
+        const deleteBtn = listItem.querySelector('.delete');
+        
+        editBtn.addEventListener('click', () => {
+            const itemId = editBtn.getAttribute('data-id');
+            openItemModal(itemId);
+        });
+        
+        deleteBtn.addEventListener('click', () => {
+            const itemId = deleteBtn.getAttribute('data-id');
+            deleteMenuItem(itemId);
+        });
         
         elements.menuItemsList.appendChild(listItem);
     });
 }
+
 
 // Filter menu items
 function filterMenuItems() {
@@ -686,6 +698,7 @@ function populateItemCategorySelect() {
 }
 
 // Open item modal
+// Open item modal
 function openItemModal(itemId = null) {
     // Reset form
     elements.itemForm.reset();
@@ -706,6 +719,7 @@ function openItemModal(itemId = null) {
             elements.itemCalories.value = item.calories;
             elements.itemAllergens.value = item.allergens || '';
             elements.itemIngredients.value = item.ingredients || '';
+            elements.itemIngredientsAr.value = item.ingredients_ar || '';
             elements.itemVisible.checked = item.visible;
             
             // Show image preview
@@ -721,11 +735,6 @@ function openItemModal(itemId = null) {
     
     // Show modal
     elements.itemModal.style.display = 'block';
-}
-
-// Edit menu item
-function editMenuItem(itemId) {
-    openItemModal(itemId);
 }
 
 // Handle item form submit
@@ -746,6 +755,7 @@ async function handleItemSubmit(e) {
         calories: parseInt(elements.itemCalories.value) || 0,
         allergens: elements.itemAllergens.value || '',
         ingredients: elements.itemIngredients.value || '',
+        ingredients_ar: elements.itemIngredientsAr.value || '',
         visible: elements.itemVisible.checked
     };
     
