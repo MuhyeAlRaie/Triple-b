@@ -198,7 +198,7 @@ function renderCategoryThumbnails() {
         id: 'all',
         name_en: 'All',
         name_ar: 'الكل',
-        image_url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+        image_url: 'assets/images/all.png' // Placeholder image for "All"
     });
     
     if (selectedCategory === 'all') {
