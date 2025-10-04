@@ -40,7 +40,7 @@ body {
 /* Buttons */
 .btn {
     display: inline-block;
-    background-color: var(--primary-color);
+    background-color: #ef4f24;
     color: white;
     border: none;
     padding: 10px 20px;
