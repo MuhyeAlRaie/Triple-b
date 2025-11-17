@@ -23,7 +23,11 @@ const elements = {
     modalItemCalories: document.getElementById('modal-item-calories'),
     modalItemAllergens: document.getElementById('modal-item-allergens'),
     modalItemIngredients: document.getElementById('modal-item-ingredients'),
-     vortishopText: document.getElementById('vortishop-text') 
+    modalItemNutrition: document.getElementById('modal-item-nutrition'),
+    modalNutritionTitle: document.getElementById('nutrition-title'),
+nutritionGrid: document.getElementById('nutrition-grid'),
+     vortishopText: document.getElementById('vortishop-text')
+
 };
 
 // Initialize the app
@@ -356,6 +360,47 @@ function showItemDetails(item) {
         <i class="fas fa-list"></i> 
         ${currentLanguage === 'en' ? 'Ingredients' : 'المكونات'}: ${ingredients}
     `;
+    
+    // Update nutrition title
+    elements.modalNutritionTitle.textContent = currentLanguage === 'en' ? 'Nutrition Information' : 'معلومات غذائية';
+    
+    // Create nutrition data array
+    const nutritionData = [
+        { key: 'protein', unit: 'g', en: 'Protein', ar: 'بروتين' },
+        { key: 'carbs', unit: 'g', en: 'Carbohydrates', ar: 'كربوهيدرات' },
+        { key: 'fat', unit: 'g', en: 'Fat', ar: 'دهون' },
+        { key: 'trans_fat', unit: 'g', en: 'Trans Fat', ar: 'دهون غير مشبعة' },
+        { key: 'saturated_fat', unit: 'g', en: 'Saturated Fat', ar: 'دهون مشبعة' },
+        { key: 'dietary_fiber', unit: 'g', en: 'Dietary Fiber', ar: 'ألياف غذائية' },
+        { key: 'cholesterol', unit: 'mg', en: 'Cholesterol', ar: 'كوليسترول' },
+        { key: 'added_sugars', unit: 'g', en: 'Added Sugars', ar: 'سكريات مضافة' },
+        { key: 'total_sugars', unit: 'g', en: 'Total Sugars', ar: 'إجمالي السكريات' },
+        { key: 'polyols', unit: 'g', en: 'Polyols', ar: 'بوليولات' },
+        { key: 'sodium', unit: 'mg', en: 'Sodium', ar: 'صوديوم' },
+        { key: 'salt', unit: 'g', en: 'Salt', ar: 'ملح' },
+        { key: 'caffeine', unit: 'mg', en: 'Caffeine', ar: 'كافيين' }
+    ];
+    
+    // Generate nutrition grid HTML
+    let nutritionHTML = '';
+    nutritionData.forEach(nutrient => {
+        const value = item[nutrient.key] || 0;
+        if (value > 0) { // Only show nutrients with values > 0
+            nutritionHTML += `
+                <div class="nutrition-item">
+                    <div class="nutrition-name">${currentLanguage === 'en' ? nutrient.en : nutrient.ar}</div>
+                    <div class="nutrition-value">${value}${nutrient.unit}</div>
+                </div>
+            `;
+        }
+    });
+    
+    // If no nutrition data, show a message
+    if (nutritionHTML === '') {
+        nutritionHTML = `<div class="no-nutrition-data">${currentLanguage === 'en' ? 'No nutrition information available' : 'لا توجد معلومات غذائية متاحة'}</div>`;
+    }
+    
+    elements.nutritionGrid.innerHTML = nutritionHTML;
     
     // Show modal
     elements.itemModal.style.display = 'block';

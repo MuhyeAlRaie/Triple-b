@@ -66,6 +66,20 @@ const elements = {
     itemImagePreview: document.getElementById('item-image-preview'),
     itemVisible: document.getElementById('item-visible'),
     itemMessage: document.getElementById('item-message'),
+    itemProtein: document.getElementById('item-protein'),
+itemCarbs: document.getElementById('item-carbs'),
+itemFat: document.getElementById('item-fat'),
+temTransFat: document.getElementById('item-trans-fat'),
+itemSaturatedFat: document.getElementById('item-saturated-fat'),
+itemDietaryFiber: document.getElementById('item-dietary-fiber'),
+itemCholesterol: document.getElementById('item-cholesterol'),
+itemAddedSugars: document.getElementById('item-added-sugars'),
+itemTotalSugars: document.getElementById('item-total-sugars'),
+itemPolyols: document.getElementById('item-polyols'),
+itemSodium: document.getElementById('item-sodium'),
+itemSalt: document.getElementById('item-salt'),
+itemCaffeine: document.getElementById('item-caffeine'),
+
     
     // Notification
     notification: document.getElementById('notification'),
@@ -706,6 +720,19 @@ function openItemModal(itemId = null) {
     elements.itemMessage.className = 'message';
     elements.itemImagePreview.innerHTML = '';
     
+    // Safely reset nutrition fields to default values
+    const nutritionFields = [
+        'itemProtein', 'itemCarbs', 'itemFat', 'itemTransFat', 'itemSaturatedFat',
+        'itemDietaryFiber', 'itemCholesterol', 'itemAddedSugars', 'itemTotalSugars',
+        'itemPolyols', 'itemSodium', 'itemSalt', 'itemCaffeine'
+    ];
+    
+    nutritionFields.forEach(field => {
+        if (elements[field]) {
+            elements[field].value = 0;
+        }
+    });
+    
     if (itemId) {
         // Edit mode
         const item = menuItems.find(i => i.id === itemId);
@@ -722,6 +749,21 @@ function openItemModal(itemId = null) {
             elements.itemIngredientsAr.value = item.ingredients_ar || '';
             elements.itemVisible.checked = item.visible;
             
+            // Safely set nutrition fields if they exist
+            if (elements.itemProtein) elements.itemProtein.value = item.protein || 0;
+            if (elements.itemCarbs) elements.itemCarbs.value = item.carbs || 0;
+            if (elements.itemFat) elements.itemFat.value = item.fat || 0;
+            if (elements.itemTransFat) elements.itemTransFat.value = item.trans_fat || 0;
+            if (elements.itemSaturatedFat) elements.itemSaturatedFat.value = item.saturated_fat || 0;
+            if (elements.itemDietaryFiber) elements.itemDietaryFiber.value = item.dietary_fiber || 0;
+            if (elements.itemCholesterol) elements.itemCholesterol.value = item.cholesterol || 0;
+            if (elements.itemAddedSugars) elements.itemAddedSugars.value = item.added_sugars || 0;
+            if (elements.itemTotalSugars) elements.itemTotalSugars.value = item.total_sugars || 0;
+            if (elements.itemPolyols) elements.itemPolyols.value = item.polyols || 0;
+            if (elements.itemSodium) elements.itemSodium.value = item.sodium || 0;
+            if (elements.itemSalt) elements.itemSalt.value = item.salt || 0;
+            if (elements.itemCaffeine) elements.itemCaffeine.value = item.caffeine || 0;
+            
             // Show image preview
             if (item.image_url) {
                 elements.itemImagePreview.innerHTML = `<img src="${item.image_url}" alt="Item Image Preview">`;
@@ -737,7 +779,7 @@ function openItemModal(itemId = null) {
     elements.itemModal.style.display = 'block';
 }
 
-// Handle item form submit
+// Update handleItemSubmit function
 async function handleItemSubmit(e) {
     e.preventDefault();
     
@@ -756,6 +798,19 @@ async function handleItemSubmit(e) {
         allergens: elements.itemAllergens.value || '',
         ingredients: elements.itemIngredients.value || '',
         ingredients_ar: elements.itemIngredientsAr.value || '',
+        protein: elements.itemProtein ? parseInt(elements.itemProtein.value) || 0 : 0,
+        carbs: elements.itemCarbs ? parseInt(elements.itemCarbs.value) || 0 : 0,
+        fat: elements.itemFat ? parseInt(elements.itemFat.value) || 0 : 0,
+        trans_fat: elements.itemTransFat ? parseInt(elements.itemTransFat.value) || 0 : 0,
+        saturated_fat: elements.itemSaturatedFat ? parseInt(elements.itemSaturatedFat.value) || 0 : 0,
+        dietary_fiber: elements.itemDietaryFiber ? parseInt(elements.itemDietaryFiber.value) || 0 : 0,
+        cholesterol: elements.itemCholesterol ? parseInt(elements.itemCholesterol.value) || 0 : 0,
+        added_sugars: elements.itemAddedSugars ? parseInt(elements.itemAddedSugars.value) || 0 : 0,
+        total_sugars: elements.itemTotalSugars ? parseInt(elements.itemTotalSugars.value) || 0 : 0,
+        polyols: elements.itemPolyols ? parseInt(elements.itemPolyols.value) || 0 : 0,
+        sodium: elements.itemSodium ? parseInt(elements.itemSodium.value) || 0 : 0,
+        salt: elements.itemSalt ? parseInt(elements.itemSalt.value) || 0 : 0,
+        caffeine: elements.itemCaffeine ? parseInt(elements.itemCaffeine.value) || 0 : 0,
         visible: elements.itemVisible.checked
     };
     
