@@ -923,3 +923,39 @@ body {
     min-width: 200px;
     margin: 0 10px 15px;
 }
+
+/* Allergen Warning Section */
+.allergen-warning {
+    background-color: #fff8e1;
+    border-top: 1px solid #ffecb3;
+    border-bottom: 1px solid #ffecb3;
+    padding: 15px 20px;
+    margin: 20px 0;
+    text-align: center;
+    color: #5d4037;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.allergen-text strong {
+    color: #d84315;
+    font-weight: bold;
+}
+
+/* RTL Support */
+[dir="rtl"] .allergen-warning {
+    text-align: right;
+}
+
+[dir="rtl"] .allergen-text strong {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .allergen-warning {
+        padding: 12px 15px;
+        font-size: 13px;
+    }
+}

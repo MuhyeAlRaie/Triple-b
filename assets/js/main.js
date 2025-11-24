@@ -26,7 +26,10 @@ const elements = {
     modalItemNutrition: document.getElementById('modal-item-nutrition'),
     modalNutritionTitle: document.getElementById('nutrition-title'),
 nutritionGrid: document.getElementById('nutrition-grid'),
+allergenText: document.getElementById('allergen-text'),
+
      vortishopText: document.getElementById('vortishop-text')
+     
 
 };
 
@@ -94,6 +97,9 @@ async function loadRestaurantData() {
         // Set default language
         currentLanguage = restaurantData.lang_default;
         updateLanguageToggle();
+        updateAllergenText();
+        
+
     } catch (error) {
         console.error('Error loading restaurant data:', error);
         showNotification('Error loading restaurant data', 'error');
@@ -176,6 +182,7 @@ function toggleLanguage() {
     document.documentElement.setAttribute('dir', currentLanguage === 'ar' ? 'rtl' : 'ltr');
     updateLanguageToggle();
     updateVortishopText();
+    updateAllergenText(); 
     renderMenu();
 }
 
@@ -192,6 +199,20 @@ function updateVortishopText() {
         elements.vortishopText.textContent = 'مدعوم من ';
     }
 }
+
+// Add this function to update allergen text based on language
+function updateAllergenText() {
+    if (currentLanguage === 'en') {
+        elements.allergenText.innerHTML = `
+            <strong>Allergen Warning:</strong> Prepared food may contain the following ingredients: dairy, eggs, wheat, peanuts, gluten, and soy. If you are allergic to any of these ingredients, please inform your waiter. Thank you. Adults need an average of 2000 calories, and individual needs may vary. Additional nutritional information is available upon request. Prices include VAT.
+        `;
+    } else {
+        elements.allergenText.innerHTML = `
+            <strong>تنبيه مسببات الحساسية:</strong> قد يحتوي الطعام المحضر على المكونات التالية: منتجات الالبان- البيض القمح- الفول السوداني- الجوز والصويا. اذا كنت تعاني من الحساسية من هذه المكونات يرجى تنبيه النادل الخاص بك. شكرا. يحتاج البالغون الى 2000 سعره حرارية في المتوسط ويحتاج الأطفال من هم في سن 4 - 13 من ( 1200 – 1500 )سعرة حرارية في المتوسط يوميا وقد تختلف الاحتياجات الفردية من شخص الى اخر. البيانات التغذوية الاضافية متاحة عند الطلب. الاسعار تشمل ضريبة القيمة المضافة.
+        `;
+    }
+}
+
 
 // Render category thumbnails
 function renderCategoryThumbnails() {
