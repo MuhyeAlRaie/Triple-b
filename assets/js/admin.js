@@ -25,6 +25,8 @@ const elements = {
     restaurantNameEn: document.getElementById('restaurant-name-en'),
     restaurantNameAr: document.getElementById('restaurant-name-ar'),
     instagramUrl: document.getElementById('instagram-url'),
+    googleReviewsUrl: document.getElementById('google-reviews-url'),
+
     logoUpload: document.getElementById('logo-upload'),
     logoPreview: document.getElementById('logo-preview'),
     coverUpload: document.getElementById('cover-upload'),
@@ -309,6 +311,7 @@ function renderRestaurantData() {
     elements.restaurantNameEn.value = restaurantData.name_en || '';
     elements.restaurantNameAr.value = restaurantData.name_ar || '';
     elements.instagramUrl.value = restaurantData.instagram_url || '';
+    elements.googleReviewsUrl.value = restaurantData.google_reviews_url || '';
     elements.defaultLang.value = restaurantData.lang_default || 'en';
     
     // Show logo and cover previews
@@ -351,6 +354,7 @@ async function handleRestaurantSubmit(e) {
             name_en: elements.restaurantNameEn.value,
             name_ar: elements.restaurantNameAr.value,
             instagram_url: elements.instagramUrl.value,
+            google_reviews_url: elements.googleReviewsUrl.value,
             logo_image: logoUrl,
             cover_image: coverUrl,
             lang_default: elements.defaultLang.value

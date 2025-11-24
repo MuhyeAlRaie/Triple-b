@@ -144,7 +144,9 @@ body {
 /* Customer Menu Styles */
 .restaurant-header {
     position: relative;
-    margin-bottom: 20px;
+    width: 100%;
+    color: var( --secondary-color);
+    text-align: center;
 }
 
 .cover-image-container {
@@ -160,41 +162,34 @@ body {
 }
 
 .restaurant-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #1a1919;
-    box-shadow: var(--shadow);
-    border-radius: var(--border-radius);
-    margin-top: -50px;
     position: relative;
+    padding: 20px;
+    background-color: rgba(27, 27, 27, 0.7);
+    margin-top: -40px;
     z-index: 1;
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .logo {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #eee1c7;
-    box-shadow: var(--shadow);
+    border: 3px solid white;
     margin-bottom: 10px;
 }
 
 .restaurant-info h1 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: var(--secondary-color);
+    margin: 0 0 10px 0;
+    font-size: 24px;
 }
+
 
 .restaurant-info a {
     color: var(--primary-color);
     font-size: 1.5rem;
     margin-top: 5px;
+        text-decoration: none;
+
 }
 
 .language-toggle {
@@ -1068,3 +1063,6 @@ input[type="checkbox"]:checked + .checkbox-label:after {
 [dir="rtl"] .allergen-name .en {
     margin-right: 8px;
 }
+
+
+

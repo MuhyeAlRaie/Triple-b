@@ -13,6 +13,8 @@ const elements = {
     logo: document.getElementById('logo'),
     restaurantName: document.getElementById('restaurant-name'),
     instagramLink: document.getElementById('instagram-link'),
+    googleReviewsLink: document.getElementById('google-reviews-link'),
+
     langToggle: document.getElementById('lang-toggle'),
     categoriesContainer: document.getElementById('categories-container'),
     menuItemsContainer: document.getElementById('menu-items'),
@@ -94,14 +96,14 @@ async function loadRestaurantData() {
         elements.coverImage.src = restaurantData.cover_image;
         elements.logo.src = restaurantData.logo_image;
         elements.restaurantName.textContent = restaurantData[`name_${currentLanguage}`];
-        elements.instagramLink.href = restaurantData.instagram_url;
+        elements.instagramLink.href = restaurantData.instagram_url || '#';
+        elements.googleReviewsLink.href = restaurantData.google_reviews_url || '#';
         
         // Set default language
         currentLanguage = restaurantData.lang_default;
         updateLanguageToggle();
+        updateVortishopText();
         updateAllergenText();
-        
-
     } catch (error) {
         console.error('Error loading restaurant data:', error);
         showNotification('Error loading restaurant data', 'error');
