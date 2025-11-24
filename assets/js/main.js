@@ -27,6 +27,8 @@ const elements = {
     modalNutritionTitle: document.getElementById('nutrition-title'),
 nutritionGrid: document.getElementById('nutrition-grid'),
 allergenText: document.getElementById('allergen-text'),
+modalItemAllergens: document.getElementById('modal-item-allergens'),
+
 
      vortishopText: document.getElementById('vortishop-text')
      
@@ -316,13 +318,15 @@ function renderMenuItems() {
 }
 
 // Create menu item card
+// Update createMenuItemCard function
 function createMenuItemCard(item) {
     const card = document.createElement('div');
     card.className = 'menu-item-card';
     card.dataset.itemId = item.id;
     
-    // Format allergens
-    const allergens = item.allergens ? item.allergens.split(',').map(a => a.trim()).join(', ') : '';
+    // Get allergens in current language
+    const allergens = getAllergenDisplayNames(item);
+    const allergenText = allergens.length > 0 ? allergens.join(', ') : '';
     
     // Get ingredients based on current language
     const ingredients = currentLanguage === 'en' ? 
@@ -340,7 +344,7 @@ function createMenuItemCard(item) {
                 <span class="menu-item-calories">
                     <i class="fas fa-fire"></i> ${item.calories} ${currentLanguage === 'en' ? 'cal' : 'سعرة'}
                 </span>
-                ${allergens ? `<span class="menu-item-allergens"><i class="fas fa-exclamation-triangle"></i> ${currentLanguage === 'en' ? 'Allergens' : 'مسببات الحساسية'}: ${allergens}</span>` : ''}
+                ${allergenText ? `<span class="menu-item-allergens"><i class="fas fa-exclamation-triangle"></i> ${currentLanguage === 'en' ? 'Allergens' : 'مسببات الحساسية'}: ${allergenText}</span>` : ''}
             </div>
             <p class="menu-item-ingredients">${ingredients}</p>
             <button class="view-details-btn">${currentLanguage === 'en' ? 'View Details' : 'عرض التفاصيل'}</button>
@@ -353,11 +357,22 @@ function createMenuItemCard(item) {
     return card;
 }
 
+// Add function to get allergen display names
+function getAllergenDisplayNames(item) {
+    const allergens = [];
+    if (item.allergen_gluten) allergens.push(currentLanguage === 'en' ? 'Gluten' : 'جلوتين');
+    if (item.allergen_dairy) allergens.push(currentLanguage === 'en' ? 'Dairy' : 'منتجات الألبان');
+    if (item.allergen_eggs) allergens.push(currentLanguage === 'en' ? 'Eggs' : 'بيض');
+    if (item.allergen_mustard) allergens.push(currentLanguage === 'en' ? 'Mustard' : 'خردل');
+    if (item.allergen_sesame) allergens.push(currentLanguage === 'en' ? 'Sesame seeds' : 'بذور السمسم');
+    return allergens;
+}
+
 // Show item details in modal
 function showItemDetails(item) {
-    // Format allergens
-    const allergens = item.allergens ? item.allergens.split(',').map(a => a.trim()).join(', ') : 
-                     (currentLanguage === 'en' ? 'None' : 'لا يوجد');
+    // Get allergens in current language
+    const allergens = getAllergenDisplayNames(item);
+    const allergenText = allergens.length > 0 ? allergens.join(', ') : (currentLanguage === 'en' ? 'None' : 'لا يوجد');
     
     // Get ingredients based on current language
     const ingredients = currentLanguage === 'en' ? 
@@ -375,7 +390,7 @@ function showItemDetails(item) {
     `;
     elements.modalItemAllergens.innerHTML = `
         <i class="fas fa-exclamation-triangle"></i> 
-        ${currentLanguage === 'en' ? 'Allergens' : 'مسببات الحساسية'}: ${allergens}
+        ${currentLanguage === 'en' ? 'Allergens' : 'مسببات الحساسية'}: ${allergenText}
     `;
     elements.modalItemIngredients.innerHTML = `
         <i class="fas fa-list"></i> 

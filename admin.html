@@ -159,10 +159,95 @@
                 <label for="item-calories">Calories</label>
                 <input type="number" id="item-calories" min="0">
             </div>
-            <div class="form-group">
-                <label for="item-allergens">Allergens (comma-separated)</label>
-                <input type="text" id="item-allergens">
+           <div class="form-section">
+    <h3>Allergens</h3>
+    <div class="allergen-list">
+        <div class="allergen-item">
+            <div class="allergen-checkbox">
+                <input type="checkbox" id="allergen-gluten" name="allergen-gluten">
+                <label for="allergen-gluten" class="checkbox-label"></label>
             </div>
+            <div class="allergen-info">
+                <div class="allergen-name">
+                    <span class="en">Gluten</span>
+                    <span class="ar">الجلوتين</span>
+                </div>
+                <div class="allergen-desc">
+                    <span class="en">Such as wheat, spelt, pasta and cereals</span>
+                    <span class="ar">مثل القمح، السبلت، المعكرونة والحبوب</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="allergen-item">
+            <div class="allergen-checkbox">
+                <input type="checkbox" id="allergen-dairy" name="allergen-dairy">
+                <label for="allergen-dairy" class="checkbox-label"></label>
+            </div>
+            <div class="allergen-info">
+                <div class="allergen-name">
+                    <span class="en">Dairy</span>
+                    <span class="ar">منتجات الألبان</span>
+                </div>
+                <div class="allergen-desc">
+                    <span class="en">Such as milk, cheese and yogurt</span>
+                    <span class="ar">مثل الحليب، الجبن والزبادي</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="allergen-item">
+            <div class="allergen-checkbox">
+                <input type="checkbox" id="allergen-eggs" name="allergen-eggs">
+                <label for="allergen-eggs" class="checkbox-label"></label>
+            </div>
+            <div class="allergen-info">
+                <div class="allergen-name">
+                    <span class="en">Eggs</span>
+                    <span class="ar">البيض</span>
+                </div>
+                <div class="allergen-desc">
+                    <span class="en">Such as cake and scrambled eggs</span>
+                    <span class="ar">مثل الكعك والبيض المخفوق</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="allergen-item">
+            <div class="allergen-checkbox">
+                <input type="checkbox" id="allergen-mustard" name="allergen-mustard">
+                <label for="allergen-mustard" class="checkbox-label"></label>
+            </div>
+            <div class="allergen-info">
+                <div class="allergen-name">
+                    <span class="en">Mustard</span>
+                    <span class="ar">الخردل</span>
+                </div>
+                <div class="allergen-desc">
+                    <span class="en">Such as some pickled vegetables</span>
+                    <span class="ar">مثل بعض الخضروات المخللة</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="allergen-item">
+            <div class="allergen-checkbox">
+                <input type="checkbox" id="allergen-sesame" name="allergen-sesame">
+                <label for="allergen-sesame" class="checkbox-label"></label>
+            </div>
+            <div class="allergen-info">
+                <div class="allergen-name">
+                    <span class="en">Sesame seeds</span>
+                    <span class="ar">بذور السمسم</span>
+                </div>
+                <div class="allergen-desc">
+                    <span class="en">Like sesame oil</span>
+                    <span class="ar">مثل زيت السمسم</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
             <div class="form-group">
                 <label for="item-ingredients">Ingredients (English, comma-separated)</label>
                 <textarea id="item-ingredients"></textarea>

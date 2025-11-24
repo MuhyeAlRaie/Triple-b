@@ -59,7 +59,7 @@ const elements = {
     itemNameAr: document.getElementById('item-name-ar'),
     itemPrice: document.getElementById('item-price'),
     itemCalories: document.getElementById('item-calories'),
-    itemAllergens: document.getElementById('item-allergens'),
+    // itemAllergens: document.getElementById('item-allergens'),
     itemIngredients: document.getElementById('item-ingredients'),
     itemIngredientsAr: document.getElementById('item-ingredients-ar'), // Add this line
     itemImage: document.getElementById('item-image'),
@@ -79,6 +79,11 @@ itemPolyols: document.getElementById('item-polyols'),
 itemSodium: document.getElementById('item-sodium'),
 itemSalt: document.getElementById('item-salt'),
 itemCaffeine: document.getElementById('item-caffeine'),
+allergenGluten: document.getElementById('allergen-gluten'),
+allergenDairy: document.getElementById('allergen-dairy'),
+allergenEggs: document.getElementById('allergen-eggs'),
+allergenMustard: document.getElementById('allergen-mustard'),
+allergenSesame: document.getElementById('allergen-sesame'),
 
     
     // Notification
@@ -720,7 +725,7 @@ function openItemModal(itemId = null) {
     elements.itemMessage.className = 'message';
     elements.itemImagePreview.innerHTML = '';
     
-    // Safely reset nutrition fields to default values
+    // Reset nutrition fields to default values
     const nutritionFields = [
         'itemProtein', 'itemCarbs', 'itemFat', 'itemTransFat', 'itemSaturatedFat',
         'itemDietaryFiber', 'itemCholesterol', 'itemAddedSugars', 'itemTotalSugars',
@@ -730,6 +735,18 @@ function openItemModal(itemId = null) {
     nutritionFields.forEach(field => {
         if (elements[field]) {
             elements[field].value = 0;
+        }
+    });
+    
+    // Reset allergen checkboxes
+    const allergenFields = [
+        'allergenGluten', 'allergenDairy', 'allergenEggs', 
+        'allergenMustard', 'allergenSesame'
+    ];
+    
+    allergenFields.forEach(field => {
+        if (elements[field]) {
+            elements[field].checked = false;
         }
     });
     
@@ -744,12 +761,12 @@ function openItemModal(itemId = null) {
             elements.itemNameAr.value = item.name_ar;
             elements.itemPrice.value = item.price;
             elements.itemCalories.value = item.calories;
-            elements.itemAllergens.value = item.allergens || '';
+            // elements.itemAllergens.value = item.allergens || '';
             elements.itemIngredients.value = item.ingredients || '';
             elements.itemIngredientsAr.value = item.ingredients_ar || '';
             elements.itemVisible.checked = item.visible;
             
-            // Safely set nutrition fields if they exist
+            // Set nutrition fields if they exist
             if (elements.itemProtein) elements.itemProtein.value = item.protein || 0;
             if (elements.itemCarbs) elements.itemCarbs.value = item.carbs || 0;
             if (elements.itemFat) elements.itemFat.value = item.fat || 0;
@@ -763,6 +780,13 @@ function openItemModal(itemId = null) {
             if (elements.itemSodium) elements.itemSodium.value = item.sodium || 0;
             if (elements.itemSalt) elements.itemSalt.value = item.salt || 0;
             if (elements.itemCaffeine) elements.itemCaffeine.value = item.caffeine || 0;
+            
+            // Set allergen checkboxes
+            if (elements.allergenGluten) elements.allergenGluten.checked = item.allergen_gluten || false;
+            if (elements.allergenDairy) elements.allergenDairy.checked = item.allergen_dairy || false;
+            if (elements.allergenEggs) elements.allergenEggs.checked = item.allergen_eggs || false;
+            if (elements.allergenMustard) elements.allergenMustard.checked = item.allergen_mustard || false;
+            if (elements.allergenSesame) elements.allergenSesame.checked = item.allergen_sesame || false;
             
             // Show image preview
             if (item.image_url) {
@@ -795,7 +819,7 @@ async function handleItemSubmit(e) {
         name_ar: elements.itemNameAr.value,
         price: parseFloat(elements.itemPrice.value),
         calories: parseInt(elements.itemCalories.value) || 0,
-        allergens: elements.itemAllergens.value || '',
+        // allergens: elements.itemAllergens.value || '',
         ingredients: elements.itemIngredients.value || '',
         ingredients_ar: elements.itemIngredientsAr.value || '',
         protein: elements.itemProtein ? parseInt(elements.itemProtein.value) || 0 : 0,
@@ -811,6 +835,11 @@ async function handleItemSubmit(e) {
         sodium: elements.itemSodium ? parseInt(elements.itemSodium.value) || 0 : 0,
         salt: elements.itemSalt ? parseInt(elements.itemSalt.value) || 0 : 0,
         caffeine: elements.itemCaffeine ? parseInt(elements.itemCaffeine.value) || 0 : 0,
+        allergen_gluten: elements.allergenGluten ? elements.allergenGluten.checked : false,
+        allergen_dairy: elements.allergenDairy ? elements.allergenDairy.checked : false,
+        allergen_eggs: elements.allergenEggs ? elements.allergenEggs.checked : false,
+        allergen_mustard: elements.allergenMustard ? elements.allergenMustard.checked : false,
+        allergen_sesame: elements.allergenSesame ? elements.allergenSesame.checked : false,
         visible: elements.itemVisible.checked
     };
     
