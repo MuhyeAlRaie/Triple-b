@@ -424,7 +424,10 @@ function renderCategories() {
         return;
     }
     
-    categories.forEach(category => {
+    // Sort categories by sort_order
+    const sortedCategories = [...categories].sort((a, b) => a.sort_order - b.sort_order);
+    
+    sortedCategories.forEach(category => {
         const item = document.createElement('div');
         item.className = 'admin-list-item';
         item.innerHTML = `
@@ -647,6 +650,24 @@ function renderMenuItems(filterCategoryId = 'all') {
         `;
         return;
     }
+    
+    // Sort items by category sort_order, then by name
+    itemsToRender.sort((a, b) => {
+        // Get category sort orders
+        const categoryA = categories.find(c => c.id === a.category_id);
+        const categoryB = categories.find(c => c.id === b.category_id);
+        
+        const sortA = categoryA ? categoryA.sort_order : 999;
+        const sortB = categoryB ? categoryB.sort_order : 999;
+        
+        // First sort by category sort order
+        if (sortA !== sortB) {
+            return sortA - sortB;
+        }
+        
+        // Then sort by item name (English)
+        return a.name_en.localeCompare(b.name_en);
+    });
     
     itemsToRender.forEach(item => {
         const category = categories.find(c => c.id === item.category_id);

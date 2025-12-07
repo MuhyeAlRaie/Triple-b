@@ -155,8 +155,8 @@ async function loadMenuItems() {
         
         menuItems = data;
         
-        // Initialize filtered items
-        filteredItems = [...menuItems];
+        // Initialize filtered items and sort them
+        filteredItems = sortMenuItems([...menuItems]);
     } catch (error) {
         console.error('Error loading menu items:', error);
         showNotification('Error loading menu items', 'error');
@@ -236,8 +236,10 @@ function renderCategoryThumbnails() {
     
     elements.categoriesContainer.appendChild(allThumbnail);
     
-    // Add category thumbnails
-    categories.forEach(category => {
+    // Add category thumbnails in the correct order
+    const sortedCategories = [...categories].sort((a, b) => a.sort_order - b.sort_order);
+    
+    sortedCategories.forEach(category => {
         const thumbnail = createCategoryThumbnail(category);
         
         if (selectedCategory === category.id) {
@@ -277,10 +279,12 @@ function selectCategory(categoryId) {
         }
     });
     
-    // Filter items
+    // Filter and sort items
     if (categoryId === 'all') {
-        filteredItems = [...menuItems];
+        // When "All" is selected, sort by category order then by name
+        filteredItems = sortMenuItems([...menuItems]);
     } else {
+        // When a specific category is selected, just filter (no need to sort within category)
         filteredItems = menuItems.filter(item => item.category_id === categoryId);
     }
     
@@ -500,4 +504,24 @@ function showNotification(message, type = 'info') {
     setTimeout(() => {
         notification.classList.add('hidden');
     }, 3000);
+}
+
+// Sort menu items by category sort_order and then by name
+function sortMenuItems(items) {
+    return items.sort((a, b) => {
+        // Get category sort orders
+        const categoryA = categories.find(c => c.id === a.category_id);
+        const categoryB = categories.find(c => c.id === b.category_id);
+        
+        const sortA = categoryA ? categoryA.sort_order : 999;
+        const sortB = categoryB ? categoryB.sort_order : 999;
+        
+        // First sort by category sort order
+        if (sortA !== sortB) {
+            return sortA - sortB;
+        }
+        
+        // Then sort by item name (English)
+        return a.name_en.localeCompare(b.name_en);
+    });
 }

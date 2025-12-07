@@ -1066,3 +1066,94 @@ input[type="checkbox"]:checked + .checkbox-label:after {
 
 
 
+/* Categories Container - Sticky */
+.categories-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 15px 0;
+    background-color: #000000;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+
+.categories-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+.category-thumbnail {
+    flex: 0 0 auto;
+    margin: 0 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    min-width: 100px;
+}
+
+.category-thumbnail:hover {
+    transform: translateY(-5px);
+}
+
+.category-thumbnail.active {
+    border-bottom: 3px solid #eee1c7;
+}
+
+.category-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+}
+
+.category-name {
+    font-size: 14px;
+    color: #eee1c7;
+}
+
+/* RTL Support */
+[dir="rtl"] .categories-container {
+    direction: ltr; /* Keep the scroll direction left-to-right for consistency */
+}
+
+/* Menu Container */
+.menu-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Adjust main content to account for sticky header */
+#app {
+    padding-top: 0; /* Remove any top padding that might interfere with sticky */
+}
+
+/* Ensure the sticky categories don't overlap with content */
+.menu-items-grid {
+    margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .categories-container {
+        padding: 10px 0;
+    }
+    
+    .category-thumbnail {
+        margin: 0 5px;
+        min-width: 80px;
+    }
+    
+    .category-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .category-name {
+        font-size: 12px;
+    }
+}
+
