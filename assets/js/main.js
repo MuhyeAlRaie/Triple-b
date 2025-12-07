@@ -6,6 +6,8 @@ let categories = [];
 let menuItems = [];
 let filteredItems = [];
 let selectedCategory = 'all';
+// Add this at the top with other global variables
+const currencyIcon = 'assets/images/currency-icon.png';
 
 // DOM elements
 const elements = {
@@ -344,8 +346,7 @@ function createMenuItemCard(item) {
         <div class="menu-item-content">
             <div class="menu-item-header">
                 <h3 class="menu-item-name">${item[`name_${currentLanguage}`]}</h3>
-                <div class="menu-item-price">${item.price} SAR</div>
-            </div>
+                <div class="menu-item-price">${formatPrice(item.price)}</div>            </div>
             <div class="menu-item-meta">
                 <span class="menu-item-calories">
                     <i class="fas fa-fire"></i> ${item.calories} ${currentLanguage === 'en' ? 'cal' : 'سعرة'}
@@ -389,7 +390,7 @@ function showItemDetails(item) {
     elements.modalItemImage.src = item.image_url;
     elements.modalItemImage.alt = item[`name_${currentLanguage}`];
     elements.modalItemName.textContent = item[`name_${currentLanguage}`];
-    elements.modalItemPrice.textContent = `${item.price} SAR`;
+    elements.modalItemPrice.innerHTML = formatPrice(item.price);
     elements.modalItemCalories.innerHTML = `
         <i class="fas fa-fire"></i> 
         ${item.calories} ${currentLanguage === 'en' ? 'calories' : 'سعرة حرارية'}
@@ -524,4 +525,9 @@ function sortMenuItems(items) {
         // Then sort by item name (English)
         return a.name_en.localeCompare(b.name_en);
     });
+}
+
+// Add this helper function to format prices with icon
+function formatPrice(price) {
+    return `${price} <img src="${currencyIcon}" alt="SAR" class="currency-icon">`;
 }

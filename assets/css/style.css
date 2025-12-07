@@ -1159,3 +1159,33 @@ input[type="checkbox"]:checked + .checkbox-label:after {
     }
 }
 
+/* Currency Icon */
+.currency-icon {
+    height: 16px;
+    width: auto;
+    vertical-align: middle;
+    margin-left: 4px;
+    display: inline-block;
+}
+
+/* Menu Item Price */
+.menu-item-price {
+    font-weight: bold;
+    color: #eee1c7;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+/* Modal Item Price */
+.item-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #eee1c7;
+    margin: 10px 0;
+}
+
+/* RTL Support */
+[dir="rtl"] .currency-icon {
+    margin-left: 0;
+    margin-right: 4px;
+}
