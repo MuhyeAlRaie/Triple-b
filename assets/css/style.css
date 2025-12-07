@@ -188,6 +188,8 @@ body {
     color: var(--primary-color);
     font-size: 1.5rem;
     margin-top: 5px;
+    margin-left: 15px;
+
         text-decoration: none;
 
 }
