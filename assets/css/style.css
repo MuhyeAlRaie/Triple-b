@@ -1160,11 +1160,12 @@ input[type="checkbox"]:checked + .checkbox-label:after {
 }
 
 /* Currency Icon */
-.currency-icon {
-    height: 16px;
+img.currency-icon {
+    height: 24px;
     width: auto;
     vertical-align: middle;
     margin-left: 4px;
+    margin-top: 5px;
     display: inline-block;
 }
 
