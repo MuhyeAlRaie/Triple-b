@@ -1118,7 +1118,7 @@ input[type="checkbox"]:checked + .checkbox-label:after {
 
 /* RTL Support */
 [dir="rtl"] .categories-container {
-    direction: ltr; /* Keep the scroll direction left-to-right for consistency */
+    direction: rtl; /* Keep the scroll direction left-to-right for consistency */
 }
 
 /* Menu Container */
@@ -1189,4 +1189,75 @@ img.currency-icon {
 [dir="rtl"] .currency-icon {
     margin-left: 0;
     margin-right: 4px;
+}
+
+
+/* Activity Information */
+.item-activity {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #000000;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.item-activity i {
+    font-size: 28px;
+    margin-right: 15px;
+    color: #eee1c7;
+    flex-shrink: 0;
+}
+
+.activity-details {
+    flex: 1;
+}
+
+.activity-name {
+    font-weight: 600;
+    color: #eee1c7;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.activity-time {
+    font-size: 18px;
+    color: #eee1c7;
+    font-weight: 500;
+}
+
+/* RTL Support */
+[dir="rtl"] .item-activity {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .item-activity i {
+    margin-right: 0;
+    margin-left: 15px;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .item-activity {
+        padding: 12px;
+    }
+    
+    .item-activity i {
+        font-size: 24px;
+        margin-right: 12px;
+    }
+    
+    .activity-name {
+        font-size: 14px;
+    }
+    
+    .activity-time {
+        font-size: 16px;
+    }
 }

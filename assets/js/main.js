@@ -377,7 +377,7 @@ function getAllergenDisplayNames(item) {
 
 // Show item details in modal
 function showItemDetails(item) {
-    // Get allergens in current language
+    // Format allergens
     const allergens = getAllergenDisplayNames(item);
     const allergenText = allergens.length > 0 ? allergens.join(', ') : (currentLanguage === 'en' ? 'None' : 'لا يوجد');
     
@@ -385,6 +385,9 @@ function showItemDetails(item) {
     const ingredients = currentLanguage === 'en' ? 
         (item.ingredients || 'None') : 
         (item.ingredients_ar || item.ingredients || 'لا يوجد');
+    
+    // Get activity information
+    const activityMinutes = item.activity_brisk_walking_minutes || 0;
     
     // Update modal content
     elements.modalItemImage.src = item.image_url;
@@ -444,6 +447,36 @@ function showItemDetails(item) {
     }
     
     elements.nutritionGrid.innerHTML = nutritionHTML;
+    
+    // Clear any existing activity information
+    const existingActivity = document.querySelector('.item-activity');
+    if (existingActivity) {
+        existingActivity.remove();
+    }
+    
+    // Add activity information if available
+    if (activityMinutes > 0) {
+        const activityHTML = `
+            <div class="item-activity">
+                <i class="fas fa-walking"></i> 
+                <div class="activity-details">
+                    <div class="activity-name">${currentLanguage === 'en' ? 'Activity' : 'النشاط'}</div>
+                    <div class="activity-time">
+                        ${currentLanguage === 'en' ? 'Brisk Walking' : 'المشي السريع'}: ${activityMinutes} ${currentLanguage === 'en' ? 'minutes' : 'دقيقة'}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insert after the nutrition container
+        const nutritionContainer = document.querySelector('.item-nutrition-container');
+        if (nutritionContainer) {
+            nutritionContainer.insertAdjacentHTML('afterend', activityHTML);
+        } else {
+            // Fallback: append to modal body
+            document.querySelector('.modal-body').insertAdjacentHTML('beforeend', activityHTML);
+        }
+    }
     
     // Show modal
     elements.itemModal.style.display = 'block';

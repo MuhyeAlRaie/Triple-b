@@ -87,6 +87,8 @@ allergenEggs: document.getElementById('allergen-eggs'),
 allergenMustard: document.getElementById('allergen-mustard'),
 allergenSesame: document.getElementById('allergen-sesame'),
 
+itemActivityBriskWalking: document.getElementById('item-activity-brisk-walking'),
+
     
     // Notification
     notification: document.getElementById('notification'),
@@ -742,7 +744,6 @@ function populateItemCategorySelect() {
 }
 
 // Open item modal
-// Open item modal
 function openItemModal(itemId = null) {
     // Reset form
     elements.itemForm.reset();
@@ -774,6 +775,11 @@ function openItemModal(itemId = null) {
             elements[field].checked = false;
         }
     });
+
+        // Reset activity field
+    if (elements.itemActivityBriskWalking) {
+        elements.itemActivityBriskWalking.value = 0;
+    }
     
     if (itemId) {
         // Edit mode
@@ -813,6 +819,12 @@ function openItemModal(itemId = null) {
             if (elements.allergenMustard) elements.allergenMustard.checked = item.allergen_mustard || false;
             if (elements.allergenSesame) elements.allergenSesame.checked = item.allergen_sesame || false;
             
+
+            // Set activity field
+            if (elements.itemActivityBriskWalking) {
+                elements.itemActivityBriskWalking.value = item.activity_brisk_walking_minutes || 0;
+            }
+
             // Show image preview
             if (item.image_url) {
                 elements.itemImagePreview.innerHTML = `<img src="${item.image_url}" alt="Item Image Preview">`;
@@ -865,6 +877,7 @@ async function handleItemSubmit(e) {
         allergen_eggs: elements.allergenEggs ? elements.allergenEggs.checked : false,
         allergen_mustard: elements.allergenMustard ? elements.allergenMustard.checked : false,
         allergen_sesame: elements.allergenSesame ? elements.allergenSesame.checked : false,
+        activity_brisk_walking_minutes: elements.itemActivityBriskWalking ? parseInt(elements.itemActivityBriskWalking.value) || 0 : 0,
         visible: elements.itemVisible.checked
     };
     
