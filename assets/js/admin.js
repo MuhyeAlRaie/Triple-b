@@ -985,32 +985,32 @@ function previewImage(event, previewContainer) {
     }
 }
 
-// Upload image to Cloudinary
+// Upload image to Supabase Storage
 async function uploadImage(file) {
-    // For production, replace with your actual Cloudinary credentials
-    const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/djuelps5b/image/upload';
-    const UPLOAD_PRESET = 'qr-menu';
-    
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', UPLOAD_PRESET);
-    
     try {
-        const response = await fetch(CLOUDINARY_URL, {
-            method: 'POST',
-            body: formData
-        });
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `menu-images/${fileName}`;
         
-        const data = await response.json();
+        const { data, error } = await supabaseClient.storage
+            .from('menu-images')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
         
-        if (data.error) {
-            throw new Error(data.error.message);
+        if (error) {
+            throw error;
         }
         
-        return data.secure_url;
+        const { data: { publicUrl } } = supabaseClient.storage
+            .from('menu-images')
+            .getPublicUrl(filePath);
+        
+        return publicUrl;
     } catch (error) {
         console.error('Error uploading image:', error);
-        throw new Error('Failed to upload image');
+        throw new Error('Failed to upload image to Supabase Storage');
     }
 }
 

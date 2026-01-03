@@ -1261,3 +1261,27 @@ img.currency-icon {
         font-size: 16px;
     }
 }
+
+/* Image upload loading state */
+.image-preview.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    background-color: #f5f5f5;
+}
+
+.image-preview.loading::after {
+    content: '';
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4CAF50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
