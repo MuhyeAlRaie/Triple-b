@@ -4,8 +4,11 @@ let currentUser = null;
 let restaurantData = {};
 let categories = [];
 let menuItems = [];
+let currentLanguage = 'en'; // Add this line - admin panel defaults to English
 
 // DOM elements
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB in bytes
+
 const elements = {
     // Auth
     loginScreen: document.getElementById('login-screen'),
@@ -342,13 +345,21 @@ async function handleRestaurantSubmit(e) {
         // Upload logo if changed
         let logoUrl = restaurantData.logo_image;
         if (elements.logoUpload.files.length > 0) {
-            logoUrl = await uploadImage(elements.logoUpload.files[0]);
+            const logoFile = elements.logoUpload.files[0];
+            if (!validateFileSize(logoFile)) {
+                throw new Error('Logo file size exceeds 1MB limit');
+            }
+            logoUrl = await uploadImage(logoFile);
         }
         
         // Upload cover if changed
         let coverUrl = restaurantData.cover_image;
         if (elements.coverUpload.files.length > 0) {
-            coverUrl = await uploadImage(elements.coverUpload.files[0]);
+            const coverFile = elements.coverUpload.files[0];
+            if (!validateFileSize(coverFile)) {
+                throw new Error('Cover image file size exceeds 1MB limit');
+            }
+            coverUrl = await uploadImage(coverFile);
         }
         
         // Update restaurant data
@@ -380,13 +391,18 @@ async function handleRestaurantSubmit(e) {
         showNotification('Restaurant settings updated successfully', 'success');
     } catch (error) {
         console.error('Error updating restaurant data:', error);
-        showFormMessage(elements.restaurantMessage, 'Error updating restaurant settings', 'error');
-        showNotification('Error updating restaurant settings', 'error');
+        const errorMessage = error.message.includes('1MB') 
+            ? (currentLanguage === 'en' ? error.message : 'حجم الملف يتجاوز حد 1 ميجابايت')
+            : (currentLanguage === 'en' ? 'Error updating restaurant settings' : 'خطأ في تحديث إعدادات المطعم');
+        
+        showFormMessage(elements.restaurantMessage, errorMessage, 'error');
+        showNotification(errorMessage, 'error');
     } finally {
         elements.restaurantForm.querySelector('button[type="submit"]').innerHTML = 'Save Changes';
         elements.restaurantForm.querySelector('button[type="submit"]').disabled = false;
     }
 }
+
 
 // Load categories
 async function loadCategories() {
@@ -494,6 +510,7 @@ function editCategory(categoryId) {
 }
 
 // Handle category form submit
+// Update handleCategorySubmit function
 async function handleCategorySubmit(e) {
     e.preventDefault();
     
@@ -516,10 +533,14 @@ async function handleCategorySubmit(e) {
         
         // Upload image if changed
         if (elements.categoryImage.files.length > 0) {
-            categoryData.image_url = await uploadImage(elements.categoryImage.files[0]);
+            const imageFile = elements.categoryImage.files[0];
+            if (!validateFileSize(imageFile)) {
+                throw new Error('Category image file size exceeds 1MB limit');
+            }
+            categoryData.image_url = await uploadImage(imageFile);
         } else if (!categoryId) {
             // New category must have an image
-            throw new Error('Please upload an image for the category');
+            throw new Error(currentLanguage === 'en' ? 'Please upload an image for the category' : 'يرجى تحميل صورة للفئة');
         }
         
         if (categoryId) {
@@ -563,8 +584,12 @@ async function handleCategorySubmit(e) {
         elements.categoryModal.style.display = 'none';
     } catch (error) {
         console.error('Error saving category:', error);
-        showFormMessage(elements.categoryMessage, `Error saving category: ${error.message}`, 'error');
-        showNotification(`Error saving category: ${error.message}`, 'error');
+        const errorMessage = error.message.includes('1MB') 
+            ? (currentLanguage === 'en' ? error.message : 'حجم الملف يتجاوز حد 1 ميجابايت')
+            : `Error saving category: ${error.message}`;
+        
+        showFormMessage(elements.categoryMessage, errorMessage, 'error');
+        showNotification(errorMessage, 'error');
     } finally {
         elements.categoryForm.querySelector('button[type="submit"]').innerHTML = 'Save Category';
         elements.categoryForm.querySelector('button[type="submit"]').disabled = false;
@@ -887,10 +912,14 @@ async function handleItemSubmit(e) {
         
         // Upload image if changed
         if (elements.itemImage.files.length > 0) {
-            itemData.image_url = await uploadImage(elements.itemImage.files[0]);
+            const imageFile = elements.itemImage.files[0];
+            if (!validateFileSize(imageFile)) {
+                throw new Error('Image file size exceeds 1MB limit');
+            }
+            itemData.image_url = await uploadImage(imageFile);
         } else if (!itemId) {
             // New item must have an image
-            throw new Error('Please upload an image for the menu item');
+            throw new Error(currentLanguage === 'en' ? 'Please upload an image for the menu item' : 'يرجى تحميل صورة للصنف');
         }
         
         if (itemId) {
@@ -930,8 +959,12 @@ async function handleItemSubmit(e) {
         elements.itemModal.style.display = 'none';
     } catch (error) {
         console.error('Error saving menu item:', error);
-        showFormMessage(elements.itemMessage, `Error saving menu item: ${error.message}`, 'error');
-        showNotification(`Error saving menu item: ${error.message}`, 'error');
+        const errorMessage = error.message.includes('1MB') 
+            ? (currentLanguage === 'en' ? error.message : 'حجم الملف يتجاوز حد 1 ميجابايت')
+            : `Error saving menu item: ${error.message}`;
+        
+        showFormMessage(elements.itemMessage, errorMessage, 'error');
+        showNotification(errorMessage, 'error');
     } finally {
         elements.itemForm.querySelector('button[type="submit"]').innerHTML = 'Save Item';
         elements.itemForm.querySelector('button[type="submit"]').disabled = false;
@@ -973,14 +1006,39 @@ async function deleteMenuItem(itemId) {
     }
 }
 
-// Preview image
+// Preview image function with size validation
 function previewImage(event, previewContainer) {
     const file = event.target.files[0];
     if (file) {
+        // Validate file size
+        if (!validateFileSize(file)) {
+            // Clear the file input
+            event.target.value = '';
+            // Show error in preview
+            previewContainer.innerHTML = `
+                <div class="preview-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>${currentLanguage === 'en' ? 'File size exceeds 1MB limit' : 'حجم الملف يتجاوز حد 1 ميجابايت'}</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Show loading state
+        previewContainer.innerHTML = '<div class="loading-preview"><i class="fas fa-spinner fa-spin"></i></div>';
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-        }
+        };
+        reader.onerror = function() {
+            previewContainer.innerHTML = `
+                <div class="preview-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>${currentLanguage === 'en' ? 'Failed to load image' : 'فشل في تحميل الصورة'}</p>
+                </div>
+            `;
+        };
         reader.readAsDataURL(file);
     }
 }
@@ -988,10 +1046,17 @@ function previewImage(event, previewContainer) {
 // Upload image to Supabase Storage
 async function uploadImage(file) {
     try {
+        // Validate file size first
+        if (!validateFileSize(file)) {
+            throw new Error('File size validation failed');
+        }
+        
+        // Generate a unique file name
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `menu-images/${fileName}`;
         
+        // Upload to Supabase Storage
         const { data, error } = await supabaseClient.storage
             .from('menu-images')
             .upload(filePath, file, {
@@ -1003,6 +1068,7 @@ async function uploadImage(file) {
             throw error;
         }
         
+        // Get the public URL
         const { data: { publicUrl } } = supabaseClient.storage
             .from('menu-images')
             .getPublicUrl(filePath);
@@ -1013,6 +1079,7 @@ async function uploadImage(file) {
         throw new Error('Failed to upload image to Supabase Storage');
     }
 }
+
 
 // Show form message
 function showFormMessage(element, message, type) {
@@ -1041,4 +1108,18 @@ function showNotification(message, type = 'info') {
     setTimeout(() => {
         elements.notification.classList.add('hidden');
     }, 3000);
+}
+
+// Add a function to validate file size
+function validateFileSize(file) {
+    if (file.size > MAX_FILE_SIZE) {
+        const maxSizeMB = MAX_FILE_SIZE / (1024 * 1024);
+        const errorMessage = currentLanguage === 'en' 
+            ? `File size must be less than ${maxSizeMB}MB. Current size: ${(file.size / (1024 * 1024)).toFixed(2)}MB`
+            : `يجب أن يكون حجم الملف أقل من ${maxSizeMB} ميجابايت. الحجم الحالي: ${(file.size / (1024 * 1024)).toFixed(2)} ميجابايت`;
+        
+        showNotification(errorMessage, 'error');
+        return false;
+    }
+    return true;
 }
