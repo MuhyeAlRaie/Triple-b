@@ -372,6 +372,8 @@ function getAllergenDisplayNames(item) {
     if (item.allergen_eggs) allergens.push(currentLanguage === 'en' ? 'Eggs' : 'بيض');
     if (item.allergen_mustard) allergens.push(currentLanguage === 'en' ? 'Mustard' : 'خردل');
     if (item.allergen_sesame) allergens.push(currentLanguage === 'en' ? 'Sesame seeds' : 'بذور السمسم');
+        if (item.allergen_soybean) allergens.push(currentLanguage === 'en' ? 'Soybean' : 'فول الصويا');
+    if (item.allergen_fish) allergens.push(currentLanguage === 'en' ? 'Fish' : 'سمك');
     return allergens;
 }
 

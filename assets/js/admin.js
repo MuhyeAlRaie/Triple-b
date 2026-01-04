@@ -89,6 +89,8 @@ allergenDairy: document.getElementById('allergen-dairy'),
 allergenEggs: document.getElementById('allergen-eggs'),
 allergenMustard: document.getElementById('allergen-mustard'),
 allergenSesame: document.getElementById('allergen-sesame'),
+allergenSoybean: document.getElementById('allergen-soybean'),
+allergenFish: document.getElementById('allergen-fish'),
 
 itemActivityBriskWalking: document.getElementById('item-activity-brisk-walking'),
 
@@ -792,7 +794,7 @@ function openItemModal(itemId = null) {
     // Reset allergen checkboxes
     const allergenFields = [
         'allergenGluten', 'allergenDairy', 'allergenEggs', 
-        'allergenMustard', 'allergenSesame'
+        'allergenMustard', 'allergenSesame', 'allergenSoybean', 'allergenFish'
     ];
     
     allergenFields.forEach(field => {
@@ -800,8 +802,8 @@ function openItemModal(itemId = null) {
             elements[field].checked = false;
         }
     });
-
-        // Reset activity field
+    
+    // Reset activity field
     if (elements.itemActivityBriskWalking) {
         elements.itemActivityBriskWalking.value = 0;
     }
@@ -843,13 +845,14 @@ function openItemModal(itemId = null) {
             if (elements.allergenEggs) elements.allergenEggs.checked = item.allergen_eggs || false;
             if (elements.allergenMustard) elements.allergenMustard.checked = item.allergen_mustard || false;
             if (elements.allergenSesame) elements.allergenSesame.checked = item.allergen_sesame || false;
+            if (elements.allergenSoybean) elements.allergenSoybean.checked = item.allergen_soybean || false;
+            if (elements.allergenFish) elements.allergenFish.checked = item.allergen_fish || false;
             
-
             // Set activity field
             if (elements.itemActivityBriskWalking) {
                 elements.itemActivityBriskWalking.value = item.activity_brisk_walking_minutes || 0;
             }
-
+            
             // Show image preview
             if (item.image_url) {
                 elements.itemImagePreview.innerHTML = `<img src="${item.image_url}" alt="Item Image Preview">`;
@@ -864,6 +867,7 @@ function openItemModal(itemId = null) {
     // Show modal
     elements.itemModal.style.display = 'block';
 }
+
 
 // Update handleItemSubmit function
 async function handleItemSubmit(e) {
@@ -902,6 +906,8 @@ async function handleItemSubmit(e) {
         allergen_eggs: elements.allergenEggs ? elements.allergenEggs.checked : false,
         allergen_mustard: elements.allergenMustard ? elements.allergenMustard.checked : false,
         allergen_sesame: elements.allergenSesame ? elements.allergenSesame.checked : false,
+        allergen_soybean: elements.allergenSoybean ? elements.allergenSoybean.checked : false,
+        allergen_fish: elements.allergenFish ? elements.allergenFish.checked : false,
         activity_brisk_walking_minutes: elements.itemActivityBriskWalking ? parseInt(elements.itemActivityBriskWalking.value) || 0 : 0,
         visible: elements.itemVisible.checked
     };

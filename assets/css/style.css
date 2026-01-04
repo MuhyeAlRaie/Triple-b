@@ -1347,3 +1347,33 @@ img.currency-icon {
 [dir="rtl"] .form-help {
     text-align: right;
 }
+
+/* Allergen List - Updated for more items */
+.allergen-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .allergen-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Allergen Item - Enhanced */
+.allergen-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: all 0.2s;
+    border: 1px solid #eee;
+}
+
+.allergen-item:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
